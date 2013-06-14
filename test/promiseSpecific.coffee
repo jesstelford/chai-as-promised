@@ -13,7 +13,7 @@ describe "Promise-specific extensions:", ->
 
             done()
 
-    describe "when the promise is fulfilled", ->
+    describe.only "when the promise is fulfilled", ->
         beforeEach ->
             promise = fulfilledPromise()
 
