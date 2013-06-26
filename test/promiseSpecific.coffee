@@ -24,6 +24,7 @@ describe "Promise-specific extensions:", ->
 
         describe ".rejected", ->
             shouldFail -> promise.should.be.rejected
+        ###
         describe ".rejected.with(TypeError)", ->
             shouldFail -> promise.should.be.rejected.with(TypeError)
         describe ".rejected.with('message substring')", ->
@@ -51,6 +52,7 @@ describe "Promise-specific extensions:", ->
             shouldPass -> promise.should.not.be.rejected.with(TypeError, /regexp/)
         describe ".not.rejected.with(errorInstance)", ->
             shouldPass -> promise.should.not.be.rejected.with(error)
+        ###
 
         describe ".should.notify(done)", ->
             it "should pass the test", (done) ->
