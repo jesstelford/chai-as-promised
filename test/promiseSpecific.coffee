@@ -1,6 +1,6 @@
 "use strict"
 
-describe "Promise-specific extensions:", ->
+describe.only "Promise-specific extensions:", ->
     promise = null
     error = new Error("boo")
 
@@ -13,13 +13,13 @@ describe "Promise-specific extensions:", ->
 
             done()
 
-    describe.only "when the promise is fulfilled", ->
+    describe "when the promise is fulfilled", ->
         beforeEach ->
             promise = fulfilledPromise()
 
         describe ".fulfilled", ->
             shouldPass -> promise.should.be.fulfilled
-        describe.only ".not.fulfilled", ->
+        describe ".not.fulfilled", ->
             shouldFail
                 op: -> promise.should.not.be.fulfilled
                 message: "not to be fulfilled but it was fulfilled with undefined"
@@ -54,7 +54,6 @@ describe "Promise-specific extensions:", ->
                 op: -> promise.should.be.rejectedWith(error)
                 message: "to be rejected with [Error: boo] but it was fulfilled with undefined"
 
-        ###
         describe ".not.rejected", ->
             shouldPass -> promise.should.not.be.rejected
         describe ".not.rejectedWith(TypeError)", ->
@@ -69,7 +68,7 @@ describe "Promise-specific extensions:", ->
             shouldPass -> promise.should.not.be.rejectedWith(TypeError, /regexp/)
         describe ".not.rejectedWith(errorInstance)", ->
             shouldPass -> promise.should.not.be.rejectedWith(error)
-        ###
+
         describe ".should.notify(done)", ->
             it "should pass the test", (done) ->
                 promise.should.notify(done)
@@ -79,7 +78,9 @@ describe "Promise-specific extensions:", ->
             promise = rejectedPromise(error)
 
         describe ".fulfilled", ->
-            shouldFail -> promise.should.be.fulfilled
+            shouldFail
+                op: -> promise.should.be.fulfilled
+                message: "to be fulfilled but it was rejected with [Error: boo]"
         describe ".not.fulfilled", ->
             shouldPass -> promise.should.not.be.fulfilled
 
@@ -89,13 +90,18 @@ describe "Promise-specific extensions:", ->
         describe ".rejectedWith(theError)", ->
             shouldPass -> promise.should.be.rejectedWith(error)
         describe ".not.rejectedWith(theError)", ->
-            shouldFail -> promise.should.not.be.rejectedWith(error)
+            shouldFail
+                op: -> promise.should.not.be.rejectedWith(error)
+                message: "not to be rejected with [Error: boo]"
 
         describe ".rejectedWith(differentError)", ->
-            shouldFail -> promise.should.be.rejectedWith(new Error)
+            shouldFail
+                op: -> promise.should.be.rejectedWith(new Error)
+                message: "to be rejected with [Error] but it was rejected with [Error: boo]"
         describe ".not.rejectedWith(differentError)", ->
             shouldPass -> promise.should.not.be.rejectedWith(new Error)
 
+        ###
         describe "with an Error having message 'foo bar'", ->
             beforeEach ->
                 promise = rejectedPromise(new Error("foo bar"))
@@ -184,7 +190,6 @@ describe "Promise-specific extensions:", ->
             it "should fail the test with the original error", (done) ->
                 promise.should.notify(assertingDoneFactory(done))
 
-    ###
     describe ".should.notify with chaining (GH-3)", ->
         describe "the original promise is fulfilled", ->
             beforeEach -> promise = fulfilledPromise()
