@@ -58,7 +58,7 @@ describe "Fulfillment value assertions:", ->
         it ".fulfilled.and.notify(done)", (done) ->
             fulfilledPromise().should.be.fulfilled.and.notify(done)
 
-    describe "On a promise fulfilled with the number 42:", ->
+    describe.only "On a promise fulfilled with the number 42:", ->
         beforeEach ->
             promise = fulfilledPromise(42)
 
@@ -72,13 +72,20 @@ describe "Fulfillment value assertions:", ->
             shouldPass -> promise.should.eventually.be.a("number")
 
         describe ".eventually.be.an.instanceOf(String)", ->
-            shouldFail -> promise.should.eventually.be.an.instanceOf(String)
+            shouldFail
+                op: -> promise.should.eventually.be.an.instanceOf(String)
+                message: "42 to be an instance of String"
         describe ".eventually.be.false", ->
-            shouldFail -> promise.should.eventually.be.false
+            shouldFail
+                op: -> promise.should.eventually.be.false
+                message: "to be false"
         describe ".eventually.be.an('object')", ->
-            shouldFail -> promise.should.eventually.be.an("object")
+            shouldFail
+                op: -> promise.should.eventually.be.an("object")
+                message: "to be an object"
 
 
+        ###
         describe ".eventually.not.equal(52)", ->
             shouldPass -> promise.should.eventually.not.equal(52)
         describe ".not.eventually.equal(52)", ->
@@ -98,6 +105,7 @@ describe "Fulfillment value assertions:", ->
             shouldFail -> promise.should.not.become(42)
         describe ".not.become(52)", ->
             shouldPass -> promise.should.not.become(52)
+        ###
 
     describe "On a promise fulfilled with { foo: 'bar' }:", ->
         beforeEach ->

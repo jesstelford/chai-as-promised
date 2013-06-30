@@ -1,6 +1,6 @@
 "use strict"
 
-describe.only "Promise-specific extensions:", ->
+describe "Promise-specific extensions:", ->
     promise = null
     error = new Error("boo")
 
@@ -223,7 +223,6 @@ describe.only "Promise-specific extensions:", ->
             it "should fail the test with the original error", (done) ->
                 promise.should.notify(assertingDoneFactory(done))
 
-        ###
     describe ".should.notify with chaining (GH-3)", ->
         describe "the original promise is fulfilled", ->
             beforeEach -> promise = fulfilledPromise()
@@ -255,20 +254,21 @@ describe.only "Promise-specific extensions:", ->
                 it "should fail the test with the error from the original promise", (done) ->
                     promise.should.notify(assertingDoneFactory(done))
 
-    describe "Using with non-promises:", ->
+    ###
+    describe "Using with non-thenables:", ->
         describe "A number", ->
             number = 5
 
             it "should fail for .fulfilled", ->
-                expect(-> number.should.be.fulfilled).to.throw(TypeError, /not a promise/)
+                expect(-> number.should.be.fulfilled).to.throw(TypeError, 'not a thenable')
             it "should fail for .rejected", ->
-                expect(-> number.should.be.rejected).to.throw(TypeError, /not a promise/)
+                expect(-> number.should.be.rejected).to.throw(TypeError, 'not a thenable')
             it "should fail for .become", ->
-                expect(-> number.should.become(5)).to.throw(TypeError, /not a promise/)
+                expect(-> number.should.become(5)).to.throw(TypeError, 'not a thenable')
             it "should fail for .eventually", ->
-                expect(-> number.should.eventually.equal(5)).to.throw(TypeError, /not a promise/)
+                expect(-> number.should.eventually.equal(5)).to.throw(TypeError, 'not a thenable')
             it "should fail for .notify", ->
-                expect(-> number.should.notify(->)).to.throw(TypeError, /not a promise/)
+                expect(-> number.should.notify(->)).to.throw(TypeError, 'not a thenable')
 
     describe "Attempts to use multiple Chai as Promised properties in an assertion", ->
         shouldTellUsNo = (func) ->
