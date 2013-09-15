@@ -1,6 +1,6 @@
 ﻿"use strict"
 
-describe "Fulfillment value assertions:", ->
+describe.only "Fulfillment value assertions:", ->
     promise = null
 
     describe "Direct tests of fulfilled promises:", ->
@@ -58,7 +58,7 @@ describe "Fulfillment value assertions:", ->
         it ".fulfilled.and.notify(done)", (done) ->
             fulfilledPromise().should.be.fulfilled.and.notify(done)
 
-    describe.only "On a promise fulfilled with the number 42:", ->
+    describe "On a promise fulfilled with the number 42:", ->
         beforeEach ->
             promise = fulfilledPromise(42)
 
@@ -112,21 +112,29 @@ describe "Fulfillment value assertions:", ->
             promise = fulfilledPromise(foo: "bar")
 
         describe ".eventually.equal({ foo: 'bar' })", ->
-            shouldFail -> promise.should.eventually.equal(foo: "bar")
+            shouldFail
+                op: -> promise.should.eventually.equal(foo: "bar")
+                message: "to equal { foo: 'bar' }"
         describe ".eventually.eql({ foo: 'bar' })", ->
             shouldPass -> promise.should.eventually.eql(foo: "bar")
         describe ".eventually.deep.equal({ foo: 'bar' })", ->
             shouldPass -> promise.should.eventually.deep.equal(foo: "bar")
         describe ".eventually.not.deep.equal({ foo: 'bar' })", ->
-            shouldFail -> promise.should.eventually.not.deep.equal(foo: "bar")
+            shouldFail
+                op: -> promise.should.eventually.not.deep.equal(foo: "bar")
+                message: "not deeply equal { foo: 'bar' }"
         describe ".eventually.deep.equal({ baz: 'quux' })", ->
-            shouldFail -> promise.should.eventually.deep.equal(baz: "quux")
+            shouldFail
+                op: -> promise.should.eventually.deep.equal(baz: "quux")
+                message: "deeply equal { baz: 'quux' }"
         describe ".eventually.not.deep.equal({ baz: 'quux' })", ->
             shouldPass -> promise.should.eventually.not.deep.equal(baz: "quux")
         describe ".become({ foo: 'bar' })", ->
             shouldPass -> promise.should.become(foo: "bar")
         describe ".not.become({ foo: 'bar' })", ->
-            shouldFail -> promise.should.not.become(foo: "bar")
+            shouldFail
+                op: -> promise.should.not.become(foo: "bar")
+                message: "deeply equal { foo: 'bar' }"
 
         describe ".eventually.have.property('foo').that.equals('bar')", ->
             shouldPass -> promise.should.eventually.have.property('foo').that.equals('bar')
