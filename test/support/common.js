@@ -4,9 +4,14 @@ require("q").longStackSupport = true;
 
 global.shouldPass = function (promiseProducer) {
     it("should return a fulfilled promise", function (done) {
-        promiseProducer().then(done, function (reason) {
-            done(new Error("Expected promise to be fulfilled but it was rejected with " + reason.stack));
-        });
+        promiseProducer().then(
+            function () {
+                done();
+            },
+            function (reason) {
+                done(new Error("Expected promise to be fulfilled but it was rejected with " + reason.stack));
+            }
+        );
     });
 };
 
