@@ -1,6 +1,6 @@
 "use strict"
 
-describe.only "Assert interface:", ->
+describe "Assert interface:", ->
     promise = null
     error = new Error("boo")
 
