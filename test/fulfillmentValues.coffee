@@ -1,6 +1,6 @@
 ﻿"use strict"
 
-describe.only "Fulfillment value assertions:", ->
+describe "Fulfillment value assertions:", ->
     promise = null
 
     describe "Direct tests of fulfilled promises:", ->

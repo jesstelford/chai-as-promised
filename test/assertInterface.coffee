@@ -1,6 +1,6 @@
 "use strict"
 
-describe "Assert interface:", ->
+describe.only "Assert interface:", ->
     promise = null
     error = new Error("boo")
 
@@ -12,28 +12,42 @@ describe "Assert interface:", ->
             shouldPass -> assert.isFulfilled(promise)
 
         describe ".isRejected(promise)", ->
-            shouldFail -> assert.isRejected(promise)
+            shouldFail
+                op: -> assert.isRejected(promise)
+                message: "to be rejected"
         describe ".isRejected(promise, TypeError)", ->
-            shouldFail -> assert.isRejected(promise, TypeError)
+            shouldFail
+                op: -> assert.isRejected(promise, TypeError)
+                message: "to be rejected"
         describe ".isRejected(promise, /regexp/)", ->
-            shouldFail -> assert.isRejected(promise, /regexp/)
+            shouldFail
+                op: -> assert.isRejected(promise, /regexp/)
+                message: "to be rejected"
         describe ".isRejected(promise, /regexp/)", ->
-            shouldFail -> assert.isRejected(promise, TypeError, /regexp/)
+            shouldFail
+                op: -> assert.isRejected(promise, TypeError, /regexp/)
+                message: "to be rejected"
         describe ".isRejected(promise, errorInstance)", ->
-            shouldFail -> assert.isRejected(promise, error)
+            shouldFail
+                op: -> assert.isRejected(promise, error)
+                message: "to be rejected"
 
     describe "when the promise is rejected", ->
         beforeEach ->
             promise = rejectedPromise(error)
 
         describe ".isFulfilled", ->
-            shouldFail -> assert.isFulfilled(promise)
+            shouldFail
+                op: -> assert.isFulfilled(promise)
+                message: "to be fulfilled"
 
         describe ".isRejected(promise, theError)", ->
             shouldPass -> assert.isRejected(promise, error)
 
         describe ".isRejected(promise, differentError)", ->
-            shouldFail -> assert.isRejected(promise, new Error)
+            shouldFail
+                op: -> assert.isRejected(promise, new Error)
+                message: "to be rejected with"
 
         describe "with an Error having message 'foo bar'", ->
             beforeEach ->
@@ -43,7 +57,9 @@ describe "Assert interface:", ->
                 shouldPass -> assert.isRejected(promise, /bar/)
 
             describe ".isRejected(promise, /quux/)", ->
-                shouldFail -> assert.isRejected(promise, /quux/)
+                shouldFail
+                    op: -> assert.isRejected(promise, /quux/)
+                    message: "to be rejected with"
 
         describe "with a RangeError", ->
             beforeEach ->
@@ -52,23 +68,29 @@ describe "Assert interface:", ->
             describe ".isRejected(promise, RangeError)", ->
                 shouldPass -> assert.isRejected(promise, RangeError)
             describe ".isRejected(promise, TypeError)", ->
-                shouldFail -> assert.isRejected(promise, TypeError)
-
-    describe ".isBroken", ->
-        it "should be a synonym for rejected", ->
-            expect(assert.isBroken).to.equal(assert.isRejected)
+                shouldFail
+                    op: -> assert.isRejected(promise, TypeError)
+                    message: "to be rejected"
 
     describe "Assertion messages", ->
         message = "No. I am your father."
 
-        it "should be passed through for .isFulfilled(promise, message)", (done) ->
-            expect(assert.isFulfilled(rejectedPromise(), message)).to.be.rejected.with(message).notify(done)
+        describe "should be passed through for .isFulfilled(promise, message)", ->
+            shouldFail
+                op: -> assert.isFulfilled(rejectedPromise(), message)
+                message: message
 
-        it "should be passed through for .isRejected(promise, message)", (done) ->
-            expect(assert.isRejected(fulfilledPromise(), message)).to.be.rejected.with(message).notify(done)
+        describe "should be passed through for .isRejected(promise, message)", ->
+            shouldFail
+                op: -> assert.isRejected(fulfilledPromise(), message)
+                message: message
 
-        it "should be passed through for .isRejected(promise, TypeError, message)", (done) ->
-            expect(assert.isRejected(fulfilledPromise(), TypeError, message)).to.be.rejected.with(message).notify(done)
+        describe "should be passed through for .isRejected(promise, TypeError, message)", ->
+            shouldFail
+                op: -> assert.isRejected(fulfilledPromise(), TypeError, message)
+                message: message
 
-        it "should be passed through for .isRejected(promise, /regexp/, message)", (done) ->
-            expect(assert.isRejected(fulfilledPromise(), /regexp/, message)).to.be.rejected.with(message).notify(done)
+        describe "should be passed through for .isRejected(promise, /regexp/, message)", ->
+            shouldFail
+                op: -> assert.isRejected(fulfilledPromise(), /regexp/, message)
+                message: message
