@@ -254,38 +254,34 @@ describe "Promise-specific extensions:", =>
                 it "should fail the test with the error from the original promise", (done) =>
                     promise.should.notify(assertingDoneFactory(done))
 
-    ###
-    describe "Using with non-thenables:", =>
+    describe "Using with non-thenables", =>
         describe "A number", =>
             number = 5
 
             it "should fail for .fulfilled", =>
-                expect(=> number.should.be.fulfilled).to.throw(TypeError, 'not a thenable')
+                expect(=> number.should.be.fulfilled).to.throw(TypeError, "not a thenable")
             it "should fail for .rejected", =>
-                expect(=> number.should.be.rejected).to.throw(TypeError, 'not a thenable')
+                expect(=> number.should.be.rejected).to.throw(TypeError, "not a thenable")
             it "should fail for .become", =>
-                expect(=> number.should.become(5)).to.throw(TypeError, 'not a thenable')
+                expect(=> number.should.become(5)).to.throw(TypeError, "not a thenable")
             it "should fail for .eventually", =>
-                expect(=> number.should.eventually.equal(5)).to.throw(TypeError, 'not a thenable')
+                expect(=> number.should.eventually.equal(5)).to.throw(TypeError, "not a thenable")
             it "should fail for .notify", =>
-                expect(=> number.should.notify(=>)).to.throw(TypeError, 'not a thenable')
+                expect(=> number.should.notify(=>)).to.throw(TypeError, "not a thenable")
 
-    describe "Attempts to use multiple Chai as Promised properties in an assertion", =>
-        shouldTellUsNo = (func) =>
-            it "should fail with an informative error message", =>
-                expect(func).to.throw(Error, /Chai as Promised/)
-
+    describe "Using together with other Chai as Promised asserters", =>
         describe ".fulfilled.and.eventually.equal(42)", =>
-            shouldTellUsNo => fulfilledPromise(42).should.be.fulfilled.and.eventually.equal(42)
-        describe ".fulfilled.and.become(42)", =>
-            shouldTellUsNo => fulfilledPromise(42).should.be.fulfilled.and.become(42)
+            shouldPass => fulfilledPromise(42).should.be.fulfilled.and.eventually.equal(42)
         describe ".fulfilled.and.rejected", =>
-            shouldTellUsNo => fulfilledPromise(42).should.be.fulfilled.and.rejected
+            shouldFail
+                op: => fulfilledPromise(42).should.be.fulfilled.and.rejected
+                message: "to be rejected but it was fulfilled with 42"
 
         describe ".rejected.and.eventually.equal(42)", =>
-            shouldTellUsNo => rejectedPromise(42).should.be.rejected.and.eventually.equal(42)
+            shouldPass => rejectedPromise(42).should.be.rejected.and.eventually.equal(42)
         describe ".rejected.and.become(42)", =>
-            shouldTellUsNo => rejectedPromise(42).should.be.rejected.and.become(42)
+            shouldPass => rejectedPromise(42).should.be.rejected.and.become(42)
         describe ".rejected.and.fulfilled", =>
-            shouldTellUsNo => rejectedPromise(42).should.be.rejected.and.fulfilled
-    ###
+            shouldFail
+                op: => rejectedPromise(42).should.be.rejected.and.fulfilled
+                message: "to be fulfilled but it was rejected with 42"
