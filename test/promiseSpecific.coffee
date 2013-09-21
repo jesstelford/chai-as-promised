@@ -281,7 +281,3 @@ describe "Promise-specific extensions:", =>
             shouldPass => rejectedPromise(42).should.be.rejected.and.eventually.equal(42)
         describe ".rejected.and.become(42)", =>
             shouldPass => rejectedPromise(42).should.be.rejected.and.become(42)
-        describe ".rejected.and.fulfilled", =>
-            shouldFail
-                op: => rejectedPromise(42).should.be.rejected.and.fulfilled
-                message: "to be fulfilled but it was rejected with 42"
