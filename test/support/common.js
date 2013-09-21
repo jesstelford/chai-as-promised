@@ -1,6 +1,6 @@
 "use strict";
 
-require("q").longStackSupport = true;
+(global.Q || require("q")).longStackSupport = true;
 
 global.shouldPass = function (promiseProducer) {
     it("should return a fulfilled promise", function (done) {
