@@ -6,10 +6,24 @@ describe "Assert interface:", =>
 
     describe "when the promise is fulfilled", =>
         beforeEach =>
-            promise = fulfilledPromise()
+            promise = fulfilledPromise(foo: "bar")
 
         describe ".isFulfilled(promise)", =>
             shouldPass => assert.isFulfilled(promise)
+
+        describe ".becomes(promise, correctValue)", =>
+            shouldPass => assert.becomes(promise, foo: "bar")
+        describe ".becomes(promise, incorrectValue)", =>
+            shouldFail
+                op: => assert.becomes(promise, baz: "quux")
+                message: "to deeply equal { baz: 'quux' }"
+
+        describe ".doesNotBecome(promise, correctValue)", =>
+            shouldFail
+                op: => assert.doesNotBecome(promise, foo: "bar")
+                message: "to not deeply equal { foo: 'bar' }"
+        describe ".doesNotBecome(promise, incorrectValue)", =>
+            shouldPass => assert.doesNotBecome(promise, baz: "quux")
 
         describe ".isRejected(promise)", =>
             shouldFail
