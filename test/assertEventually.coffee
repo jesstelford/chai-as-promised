@@ -78,7 +78,7 @@ describe "Assert interface with eventually extender:", ->
                 op: -> assert.eventually.isNull(fulfilledPromise(42), message)
                 message: message
 
-        describe.only "should pass through for .eventually.isNull(promise, message) for rejected", (done) ->
+        describe "should pass through for .eventually.isNull(promise, message) for rejected", (done) ->
             shouldFail
                 op: -> assert.eventually.isNull(rejectedPromise(), message)
                 message: message
@@ -90,5 +90,5 @@ describe "Assert interface with eventually extender:", ->
 
         describe "should pass through for .eventually.equal(promise, 52, message) for rejected", (done) ->
             shouldFail
-                op: assert.eventually.equal(rejectedPromise(), 52, message)
+                op: -> assert.eventually.equal(rejectedPromise(), 52, message)
                 message: message
