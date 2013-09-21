@@ -1,6 +1,13 @@
 "use strict";
 
-(global.Q || require("q")).longStackSupport = true;
+// Note: this file is used both in the Node and browser tests.
+
+(function () {
+    var Q = global.Q || (typeof require === "function" && require("q"));
+    if (Q) {
+        Q.longStackSupport = true;
+    }
+}());
 
 global.shouldPass = function (promiseProducer) {
     it("should return a fulfilled promise", function (done) {
